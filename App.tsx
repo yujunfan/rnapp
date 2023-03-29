@@ -7,8 +7,12 @@
  *
  * @format
  */
-
-import React, {type PropsWithChildren} from 'react';
+import Realm from 'realm';
+import React, {type PropsWithChildren, useState} from 'react';
+import {RealmContext} from './src/RealmContext';
+import RealmPlugin from 'realm-flipper-plugin-device';
+import {AppProvider, UserProvider} from '@realm/react';
+import {useUser} from '@realm/react';
 import {
   SafeAreaView,
   ScrollView,
@@ -17,84 +21,76 @@ import {
   Text,
   useColorScheme,
   View,
+  Button,
 } from 'react-native';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import {Colors, Header} from 'react-native/Libraries/NewAppScreen';
+import {Book} from './src/ItemSchema';
 
-const Section: React.FC<
-  PropsWithChildren<{
-    title: string;
-  }>
-> = ({children, title}) => {
-  const isDarkMode = useColorScheme() === 'dark';
+const {RealmProvider, useRealm, useQuery} = RealmContext;
+
+const CreateDogInput = () => {
+  const [dogName, setDogName] = useState('Fido');
+  const realm = useRealm();
+
+  const handleAddDog = () => {
+    realm.write(() => {
+      // eslint-disable-next-line no-new
+      new Book(realm, {name: 'book', price: 36});
+    });
+  };
+
   return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
+    <View>
+      {/* <RealmPlugin realms={[realm]} /> */}
+      <Button onPress={() => handleAddDog()} title="Add Dog" />
+    </View>
+  );
+};
+
+const ReadData = () => {
+  const user = useUser();
+  const [dogName, setDogName] = useState('Fido');
+  const realm = useQuery(Book);
+  const realmA = new Realm({schema: [Book]});
+  console.log(realm, 'realm');
+
+  return (
+    <View>
+      <RealmPlugin realms={[realmA]} />
+      <Button title="Add aaaaDog" />
     </View>
   );
 };
 
 const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
-
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    <AppProvider
+      id="637c80262ca0f76a05475775"
+      baseUrl="https://realm.mongodb.com">
+      <SafeAreaView style={backgroundStyle}>
+        <StatusBar
+          barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+          backgroundColor={backgroundStyle.backgroundColor}
+        />
+        <ScrollView
+          contentInsetAdjustmentBehavior="automatic"
+          style={backgroundStyle}>
+          <Header />
+          <RealmProvider>
+            <View>
+              <CreateDogInput />
+              <ReadData />
+            </View>
+          </RealmProvider>
+        </ScrollView>
+      </SafeAreaView>
+    </AppProvider>
   );
 };
 
