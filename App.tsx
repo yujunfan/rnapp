@@ -7,18 +7,15 @@
  *
  * @format
  */
-import Realm from 'realm';
-import React, {type PropsWithChildren, useState} from 'react';
+import React from 'react';
 import {RealmContext} from './src/RealmContext';
 import RealmPlugin from 'realm-flipper-plugin-device';
 import {AppProvider, UserProvider} from '@realm/react';
-import {useUser} from '@realm/react';
+import {WelcomeView} from './src/WelcomeView';
 import {
   SafeAreaView,
   ScrollView,
   StatusBar,
-  StyleSheet,
-  Text,
   useColorScheme,
   View,
   Button,
@@ -30,7 +27,6 @@ import {Book} from './src/ItemSchema';
 const {RealmProvider, useRealm, useQuery} = RealmContext;
 
 const CreateDogInput = () => {
-  const [dogName, setDogName] = useState('Fido');
   const realm = useRealm();
 
   const handleAddDog = () => {
@@ -49,15 +45,13 @@ const CreateDogInput = () => {
 };
 
 const ReadData = () => {
-  const user = useUser();
-  const [dogName, setDogName] = useState('Fido');
   const realm = useQuery(Book);
-  const realmA = new Realm({schema: [Book]});
+  // const realmA = new Realm({schema: [Book]});
   console.log(realm, 'realm');
 
   return (
     <View>
-      <RealmPlugin realms={[realmA]} />
+      {/* <RealmPlugin realms={[realmA]} /> */}
       <Button title="Add aaaaDog" />
     </View>
   );
@@ -70,47 +64,28 @@ const App = () => {
   };
 
   return (
-    <AppProvider
-      id="637c80262ca0f76a05475775"
-      baseUrl="https://realm.mongodb.com">
-      <SafeAreaView style={backgroundStyle}>
-        <StatusBar
-          barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-          backgroundColor={backgroundStyle.backgroundColor}
-        />
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={backgroundStyle}>
-          <Header />
-          <RealmProvider>
-            <View>
-              <CreateDogInput />
-              <ReadData />
-            </View>
-          </RealmProvider>
-        </ScrollView>
-      </SafeAreaView>
+    <AppProvider id="mygpt-vblpc" baseUrl="https://realm.mongodb.com">
+      <UserProvider fallback={WelcomeView}>
+        <SafeAreaView style={backgroundStyle}>
+          <StatusBar
+            barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+            backgroundColor={backgroundStyle.backgroundColor}
+          />
+          <ScrollView
+            contentInsetAdjustmentBehavior="automatic"
+            style={backgroundStyle}>
+            <Header />
+            <RealmProvider>
+              <View>
+                <CreateDogInput />
+                <ReadData />
+              </View>
+            </RealmProvider>
+          </ScrollView>
+        </SafeAreaView>
+      </UserProvider>
     </AppProvider>
   );
 };
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
 
 export default App;
