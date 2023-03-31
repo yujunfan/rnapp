@@ -1,11 +1,24 @@
-export class Book extends Realm.Object<Book> {
-  name!: string;
-  price?: number;
-  static schema = {
-    name: 'Book',
+import {BSON} from 'realm';
+import Realm from 'realm';
+export class Item extends Realm.Object<Item> {
+  _id!: BSON.ObjectId;
+  isComplete!: boolean;
+  summary!: string;
+  owner_id!: string;
+
+  static schema: Realm.ObjectSchema = {
+    name: 'Item',
+    primaryKey: '_id',
     properties: {
-      name: {type: 'string', indexed: true},
-      price: 'int?',
+      // This allows us to automatically generate a unique _id for each Item
+      _id: {
+        type: 'objectId',
+        default: new BSON.ObjectId(),
+      },
+      // All todo items will default to incomplete
+      isComplete: {type: 'bool', default: false},
+      summary: 'string',
+      owner_id: 'string',
     },
   };
 }

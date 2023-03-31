@@ -8,55 +8,31 @@
  * @format
  */
 import React from 'react';
-import {RealmContext} from './src/RealmContext';
-import RealmPlugin from 'realm-flipper-plugin-device';
+import {realmContext} from './src/RealmContext';
 import {AppProvider, UserProvider} from '@realm/react';
 import {WelcomeView} from './src/WelcomeView';
+import {ItemListView} from './src/ItemListView';
 import {
   SafeAreaView,
   ScrollView,
   StatusBar,
-  useColorScheme,
   View,
-  Button,
+  StyleSheet,
+  ActivityIndicator,
+  useColorScheme,
 } from 'react-native';
 
-import {Colors, Header} from 'react-native/Libraries/NewAppScreen';
-import {Book} from './src/ItemSchema';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
 
-const {RealmProvider, useRealm, useQuery} = RealmContext;
+const {RealmProvider} = realmContext;
 
-const CreateDogInput = () => {
-  const realm = useRealm();
-
-  const handleAddDog = () => {
-    realm.write(() => {
-      // eslint-disable-next-line no-new
-      new Book(realm, {name: 'book', price: 36});
-    });
-  };
-
+const LoadingIndicator = () => {
   return (
-    <View>
-      {/* <RealmPlugin realms={[realm]} /> */}
-      <Button onPress={() => handleAddDog()} title="Add Dog" />
+    <View style={styles.activityContainer}>
+      <ActivityIndicator size="large" />
     </View>
   );
 };
-
-const ReadData = () => {
-  const realm = useQuery(Book);
-  // const realmA = new Realm({schema: [Book]});
-  console.log(realm, 'realm');
-
-  return (
-    <View>
-      {/* <RealmPlugin realms={[realmA]} /> */}
-      <Button title="Add aaaaDog" />
-    </View>
-  );
-};
-
 const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
   const backgroundStyle = {
@@ -64,7 +40,7 @@ const App = () => {
   };
 
   return (
-    <AppProvider id="mygpt-vblpc" baseUrl="https://realm.mongodb.com">
+    <AppProvider id="myappa-erzsj" baseUrl="https://realm.mongodb.com">
       <UserProvider fallback={WelcomeView}>
         <SafeAreaView style={backgroundStyle}>
           <StatusBar
@@ -74,11 +50,17 @@ const App = () => {
           <ScrollView
             contentInsetAdjustmentBehavior="automatic"
             style={backgroundStyle}>
-            <Header />
-            <RealmProvider>
+            <RealmProvider
+              sync={{
+                flexible: true,
+                onError: (_, error) => {
+                  // Show sync errors in the console
+                  console.error(error);
+                },
+              }}
+              fallback={LoadingIndicator}>
               <View>
-                <CreateDogInput />
-                <ReadData />
+                <ItemListView />
               </View>
             </RealmProvider>
           </ScrollView>
@@ -87,5 +69,19 @@ const App = () => {
     </AppProvider>
   );
 };
-
+const styles = StyleSheet.create({
+  footerText: {
+    fontSize: 12,
+    textAlign: 'center',
+  },
+  footer: {
+    padding: 24,
+  },
+  activityContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 10,
+  },
+});
 export default App;
