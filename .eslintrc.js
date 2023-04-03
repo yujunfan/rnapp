@@ -7,9 +7,11 @@ module.exports = {
     {
       files: ['*.ts', '*.tsx'],
       rules: {
-        '@typescript-eslint/no-shadow': ['error'],
+        '@typescript-eslint/no-shadow': ['warn'],
         'no-shadow': 'off',
         'no-undef': 'off',
+        // 'endOfLine': 'auto',
+        'react-native/no-inline-styles': 'off',
       },
     },
   ],

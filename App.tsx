@@ -1,87 +1,39 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * Generated with the TypeScript template
- * https://github.com/react-native-community/react-native-template-typescript
- *
- * @format
- */
 import React from 'react';
-import {realmContext} from './src/RealmContext';
-import {AppProvider, UserProvider} from '@realm/react';
-import {WelcomeView} from './src/WelcomeView';
-import {ItemListView} from './src/ItemListView';
+import {ThemeProvider} from 'react-native-elements';
+import {View} from 'react-native';
+import {StatusBar} from 'react-native';
+import Navigation from './src/navigation';
+import {StoreContext, store} from 'src/stores';
 import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  View,
-  StyleSheet,
-  ActivityIndicator,
-  useColorScheme,
-} from 'react-native';
+  SafeAreaProvider,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
 
-import {Colors} from 'react-native/Libraries/NewAppScreen';
-
-const {RealmProvider} = realmContext;
-
-const LoadingIndicator = () => {
+const App = () => {
+  const insets = useSafeAreaInsets();
   return (
-    <View style={styles.activityContainer}>
-      <ActivityIndicator size="large" />
+    <View
+      style={{
+        paddingTop: insets.top,
+        paddingBottom: insets.bottom,
+        flex: 1,
+      }}>
+      <Navigation />
     </View>
   );
 };
-const App = () => {
-  const isDarkMode = useColorScheme() === 'dark';
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
 
+const AppProvider = () => {
   return (
-    <AppProvider id="myappa-erzsj" baseUrl="https://realm.mongodb.com">
-      <UserProvider fallback={WelcomeView}>
-        <SafeAreaView style={backgroundStyle}>
-          <StatusBar
-            barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-            backgroundColor={backgroundStyle.backgroundColor}
-          />
-          <ScrollView
-            contentInsetAdjustmentBehavior="automatic"
-            style={backgroundStyle}>
-            <RealmProvider
-              sync={{
-                flexible: true,
-                onError: (_, error) => {
-                  // Show sync errors in the console
-                  console.error(error);
-                },
-              }}
-              fallback={LoadingIndicator}>
-              <View>
-                <ItemListView />
-              </View>
-            </RealmProvider>
-          </ScrollView>
-        </SafeAreaView>
-      </UserProvider>
-    </AppProvider>
+    <SafeAreaProvider>
+      <StatusBar backgroundColor="#333" translucent />
+      <ThemeProvider>
+        <StoreContext.Provider value={store}>
+          <App />
+        </StoreContext.Provider>
+      </ThemeProvider>
+    </SafeAreaProvider>
   );
 };
-const styles = StyleSheet.create({
-  footerText: {
-    fontSize: 12,
-    textAlign: 'center',
-  },
-  footer: {
-    padding: 24,
-  },
-  activityContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    padding: 10,
-  },
-});
-export default App;
+
+export default AppProvider;
