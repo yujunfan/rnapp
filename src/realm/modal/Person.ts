@@ -1,11 +1,19 @@
-export class Person {
-  id: number;
-  name: string;
-  age: number;
+import {BSON} from 'realm';
+export class Person extends Realm.Object<Person> {
+  _id!: BSON.ObjectId;
+  name!: string;
+  age!: number;
 
-  constructor(id: number, name: string, age: number) {
-    this.id = id;
-    this.name = name;
-    this.age = age;
-  }
+  static schema: Realm.ObjectSchema = {
+    name: 'Person',
+    primaryKey: '_id',
+    properties: {
+      _id: {
+        type: 'objectId',
+        default: () => new BSON.ObjectId(),
+      },
+      name: 'string',
+      age: 'string',
+    },
+  };
 }

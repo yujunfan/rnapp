@@ -1,5 +1,11 @@
 import Realm from 'realm';
-import {Person} from './../modal';
+import {Person} from './../modal/Person';
+
+export interface PersonType {
+  _id: any;
+  name: string;
+  age: string;
+}
 
 export class RealmService {
   private static instance: RealmService;
@@ -18,24 +24,24 @@ export class RealmService {
     return RealmService.instance;
   }
 
-  public insert(person: Person) {
+  public insert(person: PersonType) {
     this.realm.write(() => {
       this.realm.create('Person', person);
     });
   }
 
-  public queryAll(): Realm.Results<Person> {
-    return this.realm.objects<Person>('Person');
+  public queryAll(): Realm.Results<PersonType> {
+    return this.realm.objects<PersonType>('Person');
   }
 
-  public update(person: Person, updatePerson: Person) {
+  public update(person: PersonType, updatePerson: PersonType) {
     this.realm.write(() => {
       person.name = updatePerson.name;
       person.age = updatePerson.age;
     });
   }
 
-  public delete(person: Person) {
+  public delete(person: PersonType) {
     this.realm.write(() => {
       this.realm.delete(person);
     });

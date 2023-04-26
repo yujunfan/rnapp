@@ -1,6 +1,7 @@
 type RootStackParamList = {
   Home: undefined;
   Person: undefined;
+  RealmCURD: undefined;
 };
 
 type RootTabParamList = {

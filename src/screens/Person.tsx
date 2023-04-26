@@ -15,7 +15,9 @@ const Person = () => {
   return (
     <View>
       <Text>this is Person</Text>
-      <Button onPress={() => navigation.navigate('Home')}>back home</Button>
+      <Button onPress={() => navigation.navigate('RealmCURD')}>
+        back home
+      </Button>
     </View>
   );
 };
