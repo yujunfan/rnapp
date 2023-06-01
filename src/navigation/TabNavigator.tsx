@@ -1,3 +1,10 @@
+/*
+ * @Author: yujunfan
+ * @Date: 2023-04-28 19:31:26
+ * @LastEditors: yujunfan
+ * @LastEditTime: 2023-06-01 16:16:53
+ * @Description: bottom-tab-navigator API 配置 https://reactnavigation.org/docs/bottom-tab-navigator
+ */
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Home from 'screens/Home';
