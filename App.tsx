@@ -1,5 +1,5 @@
-import React from 'react';
-import {ThemeProvider} from 'react-native-elements';
+import React, {useContext} from 'react';
+import {ThemeProvider} from 'shared/theme';
 import {View} from 'react-native';
 import {StatusBar} from 'react-native';
 import Navigation from './src/navigation';
@@ -8,32 +8,33 @@ import {
   SafeAreaProvider,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
-
+import {observer} from 'mobx-react-lite';
 const App = () => {
   const insets = useSafeAreaInsets();
-
+  const {modeStore} = useContext(StoreContext);
   return (
-    <View
-      style={{
-        paddingTop: insets.top,
-        paddingBottom: insets.bottom,
-        flex: 1,
-      }}>
-      <Navigation />
-      {/* <MyDrawer /> */}
-    </View>
+    <ThemeProvider mode={modeStore.mode}>
+      <View
+        style={{
+          paddingTop: insets.top,
+          paddingBottom: insets.bottom,
+          flex: 1,
+        }}>
+        <Navigation />
+      </View>
+    </ThemeProvider>
   );
 };
+
+const APPObserver = observer(App);
 
 const AppProvider = () => {
   return (
     <SafeAreaProvider>
       <StatusBar backgroundColor="#333" translucent />
-      <ThemeProvider>
-        <StoreContext.Provider value={store}>
-          <App />
-        </StoreContext.Provider>
-      </ThemeProvider>
+      <StoreContext.Provider value={store}>
+        <APPObserver />
+      </StoreContext.Provider>
     </SafeAreaProvider>
   );
 };

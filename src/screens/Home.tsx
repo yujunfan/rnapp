@@ -6,7 +6,6 @@ import type {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 import type {StackScreenProps} from '@react-navigation/stack';
 import type {DrawerScreenProps} from '@react-navigation/drawer';
 import MyDrawer from 'src/navigation/drawer';
-
 type ProfileScreenProps = CompositeScreenProps<
   BottomTabScreenProps<RootTabParamList, 'Profile'>,
   CompositeScreenProps<
@@ -16,9 +15,6 @@ type ProfileScreenProps = CompositeScreenProps<
 >;
 const Home = () => {
   const navigation = useNavigation<ProfileScreenProps>();
-  const onPress = () => {
-    navigation.navigation.openDrawer();
-  };
   return <MyDrawer />;
 };
 export default Home;
