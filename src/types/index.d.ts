@@ -8,6 +8,11 @@ type RootTabParamList = {
   Profile: undefined;
 };
 
+type DrawerParamList = {
+  Feed: undefined;
+  Article: undefined;
+};
+
 declare interface Window {
   config: {
     BASE_URL: string;

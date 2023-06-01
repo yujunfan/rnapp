@@ -11,6 +11,7 @@ import {
 
 const App = () => {
   const insets = useSafeAreaInsets();
+
   return (
     <View
       style={{
@@ -19,6 +20,7 @@ const App = () => {
         flex: 1,
       }}>
       <Navigation />
+      {/* <MyDrawer /> */}
     </View>
   );
 };

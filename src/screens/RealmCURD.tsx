@@ -2,11 +2,11 @@
  * @Author: yujunfan
  * @Date: 2023-04-03 11:38:02
  * @LastEditors: yujunfan
- * @LastEditTime: 2023-04-26 20:54:14
+ * @LastEditTime: 2023-05-04 10:25:26
  * @Description: realm 本地数据增删改查例子
  */
 import React, {useEffect, useState, useRef} from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, useWindowDimensions, ScrollView} from 'react-native';
 import {Button} from '@rneui/themed';
 import {useNavigation} from '@react-navigation/native';
 import type {CompositeNavigationProp} from '@react-navigation/native';
@@ -23,9 +23,9 @@ const RealmCURD = () => {
   const realm = useRef(RealmService.getInstance());
   const navigation = useNavigation<ProfileScreenNavigationProp>();
   const [data, setData] = useState<Realm.Results<PersonType>>();
-
+  const {height} = useWindowDimensions();
   useEffect(() => {
-    realm.current && setData(realm.current.queryAll());
+    realm.current && setData(realm.current.queryAll() ?? []);
   }, [realm]);
 
   const handleWrite = () => {
@@ -38,8 +38,8 @@ const RealmCURD = () => {
   };
 
   const handlSearch = () => {
-    const dataa = realm.current.queryAll();
-    setData(dataa);
+    const allData = realm.current.queryAll();
+    setData(allData ?? []);
   };
 
   const handlDel = (person: PersonType) => {
@@ -58,21 +58,25 @@ const RealmCURD = () => {
   };
 
   return (
-    <View>
-      <Text>this is Person</Text>
-      <Button onPress={() => navigation.navigate('Home')}>back home</Button>
-      <Button onPress={handleWrite}>插入数据</Button>
+    <ScrollView contentContainerStyle={{minHeight: height}}>
+      <View>
+        <Text>this is Person</Text>
+        <Button onPress={() => navigation.navigate('Home')}>back home</Button>
+        <Button onPress={handleWrite}>插入数据</Button>
 
-      <Button onPress={handlSearch}>获取数据</Button>
+        <Button onPress={handlSearch}>获取数据</Button>
 
-      {data?.map(d => (
-        <View key={d._id}>
-          <Text>{d?.name}</Text>
-          <Button onPress={() => handlDel(d)}>删除数据</Button>
-          <Button onPress={() => handlUpdate(d)}>修改数据</Button>
-        </View>
-      ))}
-    </View>
+        {data?.map(d => (
+          <View
+            key={d?._id?.inspect() || Math.random().toString()}
+            style={{width: 100}}>
+            <Text>{d?.name}</Text>
+            <Button onPress={() => handlDel(d)}>删除数据</Button>
+            <Button onPress={() => handlUpdate(d)}>修改数据</Button>
+          </View>
+        ))}
+      </View>
+    </ScrollView>
   );
 };
 export default RealmCURD;

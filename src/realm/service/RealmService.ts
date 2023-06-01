@@ -2,7 +2,7 @@ import Realm from 'realm';
 import {Person} from './../modal/Person';
 
 export interface PersonType {
-  _id: any;
+  _id: Realm.BSON.ObjectId;
   name: string;
   age: string;
 }

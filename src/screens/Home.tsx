@@ -1,29 +1,24 @@
-import React, {useContext} from 'react';
-import {View, Text} from 'react-native';
-import {Button} from '@rneui/themed';
+import React from 'react';
+import {View, Text, Button} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import type {CompositeNavigationProp} from '@react-navigation/native';
-import type {BottomTabNavigationProp} from '@react-navigation/bottom-tabs';
-import type {StackNavigationProp} from '@react-navigation/stack';
-import {StoreContext} from 'stores/index';
-import {observer} from 'mobx-react-lite';
+import type {CompositeScreenProps} from '@react-navigation/native';
+import type {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
+import type {StackScreenProps} from '@react-navigation/stack';
+import type {DrawerScreenProps} from '@react-navigation/drawer';
+import MyDrawer from 'src/navigation/drawer';
 
-type ProfileScreenNavigationProp = CompositeNavigationProp<
-  BottomTabNavigationProp<RootTabParamList, 'Profile'>,
-  StackNavigationProp<RootStackParamList>
+type ProfileScreenProps = CompositeScreenProps<
+  BottomTabScreenProps<RootTabParamList, 'Profile'>,
+  CompositeScreenProps<
+    StackScreenProps<RootStackParamList>,
+    DrawerScreenProps<DrawerParamList>
+  >
 >;
 const Home = () => {
-  const {counterStore} = useContext(StoreContext);
-  const navigation = useNavigation<ProfileScreenNavigationProp>();
-  return (
-    <View>
-      <Text>{counterStore.count}</Text>
-      <Button onPress={() => counterStore.incrementCount()}>+</Button>
-      <Button onPress={() => counterStore.decrementCount()}>-</Button>
-      <Button onPress={() => navigation.navigate('Person')}>
-        跳题阿斯顿发
-      </Button>
-    </View>
-  );
+  const navigation = useNavigation<ProfileScreenProps>();
+  const onPress = () => {
+    navigation.navigation.openDrawer();
+  };
+  return <MyDrawer />;
 };
-export default observer(Home);
+export default Home;
