@@ -12,6 +12,7 @@ import {StyleSheet} from 'react-native';
 
 export interface Colors {
   readonly primary: string;
+  readonly text: string;
   readonly secondary: string;
   readonly background: string;
   readonly white: string;
@@ -29,6 +30,7 @@ export interface Colors {
   readonly error: string;
   readonly disabled: string;
   readonly divider: string;
+  readonly NGbg: string;
   // readonly platform: {
   //   ios: PlatformColors;
   //   android: PlatformColors;
@@ -42,6 +44,8 @@ export const lightColors: Colors = {
   secondary: '#ad1457',
   background: '#ffffff',
   white: '#ffffff',
+  text: '#080808',
+  NGbg: '#ffffff',
   black: '#242424',
   grey0: '#393e42',
   grey1: '#43484d',
@@ -62,8 +66,10 @@ export const lightColors: Colors = {
 export const darkColors: Colors = {
   primary: '#439ce0',
   secondary: '#aa49eb',
-  background: '#080808',
-  white: '#080808',
+  background: '#181818',
+  NGbg: '#080808',
+  white: '#303030',
+  text: '#ffffff',
   black: '#f2f2f2',
   grey5: '#393e42',
   grey4: '#43484d',

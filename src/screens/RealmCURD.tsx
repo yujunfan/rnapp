@@ -2,11 +2,11 @@
  * @Author: yujunfan
  * @Date: 2023-04-03 11:38:02
  * @LastEditors: yujunfan
- * @LastEditTime: 2023-05-04 10:25:26
+ * @LastEditTime: 2023-06-01 19:45:34
  * @Description: realm 本地数据增删改查例子
  */
 import React, {useEffect, useState, useRef} from 'react';
-import {View, Text, useWindowDimensions, ScrollView} from 'react-native';
+import {View,  useWindowDimensions, ScrollView} from 'react-native';
 import {Button} from '@rneui/themed';
 import {useNavigation} from '@react-navigation/native';
 import type {CompositeNavigationProp} from '@react-navigation/native';
@@ -15,6 +15,7 @@ import type {StackNavigationProp} from '@react-navigation/stack';
 import {RealmService} from 'src/realm/service';
 import {PersonType} from 'src/realm/service';
 import {BSON} from 'realm';
+import {Box, Text} from 'components';
 type ProfileScreenNavigationProp = CompositeNavigationProp<
   BottomTabNavigationProp<RootTabParamList, 'Profile'>,
   StackNavigationProp<RootStackParamList>
@@ -59,7 +60,7 @@ const RealmCURD = () => {
 
   return (
     <ScrollView contentContainerStyle={{minHeight: height}}>
-      <View>
+      <Box padding="m" backgroundColor="background" flex={1}>
         <Text>this is Person</Text>
         <Button onPress={() => navigation.navigate('Home')}>back home</Button>
         <Button onPress={handleWrite}>插入数据</Button>
@@ -75,7 +76,7 @@ const RealmCURD = () => {
             <Button onPress={() => handlUpdate(d)}>修改数据</Button>
           </View>
         ))}
-      </View>
+      </Box>
     </ScrollView>
   );
 };
